@@ -1,7 +1,6 @@
 import React from 'react';
-import { Toolbar} from '@material-ui/core';
+import { Toolbar } from '@material-ui/core';
 import styled from 'styled-components';
-
 
 const Container = styled(Toolbar)`
   background-color: var(--primary-bg);
@@ -9,6 +8,7 @@ const Container = styled(Toolbar)`
   font-size: 20px;
   line-height: 40px;
 ` as typeof Toolbar;
-const ChatsNavbar: React.FC = () => <Container>Say What?</Container>;
+
+const ChatsNavbar: React.FC = () => <Container>Whatsapp Clone</Container>;
 
 export default ChatsNavbar;

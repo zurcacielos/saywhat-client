@@ -4,9 +4,8 @@ import ChatsList from './ChatsList';
 import styled from 'styled-components';
 import { History } from 'history';
 
-
 const Container = styled.div`
-    height: 100vh
+  height: 100vh;
 `;
 
 interface ChatsListScreenProps {

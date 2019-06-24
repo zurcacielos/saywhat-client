@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { useCallback, useState, useMemo } from 'react';
 import { History } from 'history';
 
-
 const Container = styled.div`
   height: calc(100% - 56px);
   overflow-y: overlay;
@@ -74,66 +73,65 @@ const getChatsQuery = `
 `;
 
 interface ChatsListProps {
-    history: History;
+  history: History;
 }
 
 const ChatsList: React.FC<ChatsListProps> = ({ history }) => {
+  const [chats, setChats] = useState<any[]>([]);
 
-    const [chats, setChats] = useState<any[]>([]);
-    useMemo(async () => {
-        const body = await fetch(`${process.env.REACT_APP_SERVER_URL}/graphql`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ query: getChatsQuery }),
-        });
-        const {
-            data: { chats },
-        } = await body.json()
-        setChats(chats);
-    }, []);
-
-    const navToChat = useCallback(
-      chat => {
-          history.push(`chats/${chat.id}`);
+  useMemo(async () => {
+    const body = await fetch(`${process.env.REACT_APP_SERVER_URL}/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      [history]
-    );
+      body: JSON.stringify({ query: getChatsQuery }),
+    });
+    const {
+      data: { chats },
+    } = await body.json();
+    setChats(chats);
+  }, []);
 
+  const navToChat = useCallback(
+    chat => {
+      history.push(`chats/${chat.id}`);
+    },
+    [history]
+  );
 
-    return (
-        <Container>
-            <StyledList>
-                {chats.map(chat => (
-                  <StyledListItem
-                    key={chat.id}
-                    data-testid="chat"
-                    button
-                    onClick={navToChat.bind(null, chat)}>
-                        <ChatPicture
-                            data-testid="picture"
-                            src={chat.picture}
-                            alt="Profile"
-                        />
-                        <ChatInfo>
-                            <ChatName data-testid="name">{chat.name}</ChatName>
-                            {chat.lastMessage && (
-                                <React.Fragment>
-                                    <MessageContent data-testid="content">
-                                        {chat.lastMessage.content}
-                                    </MessageContent>
-                                    <MessageDate data-testid="date">
-                                        {moment(chat.lastMessage.createdAt).format('HH:mm')}
-                                    </MessageDate>
-                                </React.Fragment>
-                            )}
-                        </ChatInfo>
-                    </StyledListItem>
-                ))}
-            </StyledList>
-        </Container>
-    );
+  return (
+    <Container>
+      <StyledList>
+        {chats.map(chat => (
+          <StyledListItem
+            key={chat.id}
+            data-testid="chat"
+            button
+            onClick={navToChat.bind(null, chat)}>
+            <ChatPicture
+              data-testid="picture"
+              src={chat.picture}
+              alt="Profile"
+            />
+            <ChatInfo>
+              <ChatName data-testid="name">{chat.name}</ChatName>
+              {chat.lastMessage && (
+                <React.Fragment>
+                  <MessageContent data-testid="content">
+                    {chat.lastMessage.content}
+                  </MessageContent>
+                  <MessageDate data-testid="date">
+                    {moment(chat.lastMessage.createdAt).format('HH:mm')}
+                  </MessageDate>
+                </React.Fragment>
+              )}
+            </ChatInfo>
+          </StyledListItem>
+        ))}
+      </StyledList>
+    </Container>
+  );
 };
 
 export default ChatsList;
